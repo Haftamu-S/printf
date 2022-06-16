@@ -1,34 +1,40 @@
 #include "main.h"
 
 /**
- * print_string - loops through a string and prints
- * every character
- * @l: va_list arguments from _printf
- * @f: pointer to the struct flags that determines
- * if a flag is passed to _printf
- * Return: number of char printed
+ * printf_exclusive_string - print exclusuives string.
+ * @val: argumen t.
+ * Return: the length of the string.
  */
-int print_string(va_list l, flags_t *f)
+
+int printf_exclusive_string(va_list val)
 {
-    char *s = va_arg(l, char *);
+	char *s;
+	int i, len = 0;
+	int cast;
 
-    (void)f;
-
-    if (!s)
-        s = "(null)";
-    return (_puts(s));
-}
-
-/**
- * print_char - prints a character
- * @l: va_list arguments from _printf
- * @f: pointer to the struct flags that determines
- * if a flag is passed to _printf
- * Return: number of char printed
- */
-int print_char(va_list l, flags_t *f)
-{
-    (void)f;
-    _putchar(va_arg(l, int));
-    return (1);
+	s = va_arg(val, char *);
+	if (s == NULL)
+		s = "(null)";
+	for (i = 0; s[i] != '\0'; i++)
+	{
+		if (s[i] < 32 || s[i] >= 127)
+		{
+			_putchar('\\');
+			_putchar('x');
+			len = len + 2;
+			cast = s[i];
+			if (cast < 16)
+			{
+				_putchar('0');
+				len++;
+			}
+			len = len + printf_HEX_aux(cast);
+		}
+		else
+		{
+			_putchar(s[i]);
+			len++;
+		}
+	}
+	return (len);
 }
