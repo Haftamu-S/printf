@@ -1,25 +1,86 @@
 #include "main.h"
 
 /**
- * print_address - prints address of input in hexa format
- * @l: va_list arguments from _printf
- * @f: pointer to the struct flags that determines
- * if a flag is passed to _printf
- * Return: number of char printed
+ * printf_char - prints a char.
+ * @val: arguments.
+ * Return: 1.
  */
-int print_address(va_list l, flags_t *f)
+int printf_char(va_list val)
 {
-    char *str;
-    unsigned long int p = va_arg(l, unsigned long int);
+	char s;
 
-    register int count = 0;
+	s = va_arg(val, int);
+	_putchar(s);
+	return (1);
+}
 
-    (void)f;
+/**
+ * printf_hex - prints an hexgecimal number.
+ * @val: arguments.
+ * Return: counter.
+ */
+int printf_hex(va_list val)
+{
+	int i;
+	int *array;
+	int counter = 0;
+	unsigned int num = va_arg(val, unsigned int);
+	unsigned int temp = num;
 
-    if (!p)
-        return (_puts("(nil)"));
-    str = convert(p, 16, 1);
-    count += _puts("0x");
-    count += _puts(str);
-    return (count);
+	while (num / 16 != 0)
+	{
+		num /= 16;
+		counter++;
+	}
+	counter++;
+	array = malloc(counter * sizeof(int));
+
+	for (i = 0; i < counter; i++)
+	{
+		array[i] = temp % 16;
+		temp /= 16;
+	}
+	for (i = counter - 1; i >= 0; i--)
+	{
+		if (array[i] > 9)
+			array[i] = array[i] + 39;
+		_putchar(array[i] + '0');
+	}
+	free(array);
+	return (counter);
+}
+
+/**
+ * printf_hex_aux - prints an hexgecimal number.
+ * @num: arguments.
+ * Return: counter.
+ */
+int printf_hex_aux(unsigned long int num)
+{
+	long int i;
+	long int *array;
+	long int counter = 0;
+	unsigned long int temp = num;
+
+	while (num / 16 != 0)
+	{
+		num /= 16;
+		counter++;
+	}
+	counter++;
+	array = malloc(counter * sizeof(long int));
+
+	for (i = 0; i < counter; i++)
+	{
+		array[i] = temp % 16;
+		temp /= 16;
+	}
+	for (i = counter - 1; i >= 0; i--)
+	{
+		if (array[i] > 9)
+			array[i] = array[i] + 39;
+		_putchar(array[i] + '0');
+	}
+	free(array);
+	return (counter);
 }
