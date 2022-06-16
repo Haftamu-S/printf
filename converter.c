@@ -1,28 +1,30 @@
 #include "main.h"
 
 /**
- * convert - converts number and base into string
- * @num: input number
- * @base: input base
- * @lowercase: flag if hexa values need to be lowercase
- * Return: result string
+ * printf_string - print a string.
+ * @val: argumen t.
+ * Return: the length of the string.
  */
-char *convert(unsigned long int num, int base, int lowercase)
+
+int printf_string(va_list val)
 {
-    static char *rep;
-    static char buffer[50];
-    char *ptr;
+	char *s;
+	int i, len;
 
-    rep = (lowercase)
-? "0123456789abcdef"
-: "0123456789ABCDEF";
-    ptr = &buffer[49];
-    *ptr = '\0';
-    do
-    {
-        *--ptr = rep[num % base];
-        num /= base;
-    } while (num != 0);
-
-    return (ptr);
+	s = va_arg(val, char *);
+	if (s == NULL)
+	{
+		s = "(null)";
+		len = _strlen(s);
+		for (i = 0; i < len; i++)
+			_putchar(s[i]);
+		return (len);
+	}
+	else
+	{
+		len = _strlen(s);
+		for (i = 0; i < len; i++)
+			_putchar(s[i]);
+		return (len);
+	}
 }
