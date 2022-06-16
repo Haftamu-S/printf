@@ -1,68 +1,155 @@
 #include "main.h"
 
 /**
- * print_hex - prints a number in hexadecimal base,
- * in lowercase
- * @l: va_list arguments from _printf
- * @f: pointer to the struct flags that determines
- * if a flag is passed to _printf
- * Description: the function calls convert() which in turns converts the input
- * number into the correct base and returns it as a string
- * Return: the number of char printed
+ * printf_int - prints integer
+ * @args: argument to print
+ * Return: number of characters printed
  */
-int print_hex(va_list l, flags_t *f)
+int printf_int(va_list args)
 {
-    unsigned int num = va_arg(l, unsigned int);
-    char *str = convert(num, 16, 1);
-    int count = 0;
+	int n = va_arg(args, int);
+	int num, last = n % 10, digit, exp = 1;
+	int  i = 1;
 
-    if (f->hash == 1 && str[0] != '0')
-        count += _puts("0x");
-    count += _puts(str);
-    return (count);
+	n = n / 10;
+	num = n;
+
+	if (last < 0)
+	{
+		_putchar('-');
+		num = -num;
+		n = -n;
+		last = -last;
+		i++;
+	}
+	if (num > 0)
+	{
+		while (num / 10 != 0)
+		{
+			exp = exp * 10;
+			num = num / 10;
+		}
+		num = n;
+		while (exp > 0)
+		{
+			digit = num / exp;
+			_putchar(digit + '0');
+			num = num - (digit * exp);
+			exp = exp / 10;
+			i++;
+		}
+	}
+	_putchar(last + '0');
+
+	return (i);
 }
 
 /**
- * print_hex_big - prints a number in hexadecimal base,
- * in uppercase
- * @l: va_list arguments from _printf
- * @f: pointer to the struct that determines
- * if a flag is passed to _printf
- * Description: the function calls convert() which in turns converts the input
- * number into the correct base and returns it as a string
- * Return: the number of char printed
+ * printf_dec - prints decimal
+ * @args: argument to print
+ * Return: number of characters printed
  */
-int print_hex_big(va_list l, flags_t *f)
-{
-    unsigned int num = va_arg(l, unsigned int);
-    char *str = convert(num, 16, 0);
-    int count = 0;
 
-    if (f->hash == 1 && str[0] != '0')
-        count += _puts("0X");
-    count += _puts(str);
-    return (count);
+int printf_dec(va_list args)
+{
+	int n = va_arg(args, int);
+	int num, last = n % 10, digit;
+	int  i = 1;
+	int exp = 1;
+
+	n = n / 10;
+	num = n;
+
+	if (last < 0)
+	{
+		_putchar('-');
+		num = -num;
+		n = -n;
+		last = -last;
+		i++;
+	}
+	if (num > 0)
+	{
+		while (num / 10 != 0)
+		{
+			exp = exp * 10;
+			num = num / 10;
+		}
+		num = n;
+		while (exp > 0)
+		{
+			digit = num / exp;
+			_putchar(digit + '0');
+			num = num - (digit * exp);
+			exp = exp / 10;
+			i++;
+		}
+	}
+	_putchar(last + '0');
+
+	return (i);
 }
 
 /**
- * print_binary - prints a number in base 2
- * @l: va_list arguments from _printf
- * @f: pointer to the struct that determines
- * if a flag is passed to _printf
- * Description: the function calls convert() which in turns converts the input
- * number into the correct base and returns it as a string
- * Return: the number of char printed
+ * printf_oct - prints an octal number.
+ * @val: arguments.
+ * Return: counter.
  */
-int print_binary(va_list l, flags_t *f)
+int printf_oct(va_list val)
 {
-    unsigned int num = va_arg(l, unsigned int);
-    char *str = convert(num, 2, 0);
+	int i;
+	int *array;
+	int counter = 0;
+	unsigned int num = va_arg(val, unsigned int);
+	unsigned int temp = num;
 
-    (void)f;
-    return (_puts(str));
+	while (num / 8 != 0)
+	{
+		num /= 8;
+		counter++;
+	}
+	counter++;
+	array = malloc(counter * sizeof(int));
+
+	for (i = 0; i < counter; i++)
+	{
+		array[i] = temp % 8;
+		temp /= 8;
+	}
+	for (i = counter - 1; i >= 0; i--)
+	{
+		_putchar(array[i] + '0');
+	}
+	free(array);
+	return (counter);
 }
 
 /**
- * print_octal - prints a number in base 8
- * @l: va_list arguments from _printf
+ * printf_pointer - prints an hexgecimal number.
+ * @val: arguments.
+ * Return: counter.
+ */
+int printf_pointer(va_list val)
+{
+	void *p;
+	char *s = "(nil)";
+	long int a;
+	int b;
+	int i;
 
+	p = va_arg(val, void*);
+	if (p == NULL)
+	{
+		for (i = 0; s[i] != '\0'; i++)
+		{
+			_putchar(s[i]);
+		}
+		return (i);
+	}
+
+	a = (unsigned long int)p;
+	_putchar('0');
+	_putchar('x');
+	b = printf_hex_aux(a);
+	return (b + 2);
+}
