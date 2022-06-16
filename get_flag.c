@@ -1,32 +1,37 @@
 #include "main.h"
 
 /**
- * get_flag - turns on flags if _printf finds
- * a flag modifier in the format string
- * @s: character that holds the flag specifier
- * @f: pointer to the struct flags in which we turn the flags on
- *
- * Return: 1 if a flag has been turned on, 0 otherwise
+ * printf_HEX - prints an hexgecimal number.
+ * @val: arguments.
+ * Return: counter.
  */
-int get_flag(char s, flags_t *f)
+int printf_HEX(va_list val)
 {
-    int i = 0;
+	int i;
+	int *array;
+	int counter = 0;
+	unsigned int num = va_arg(val, unsigned int);
+	unsigned int temp = num;
 
-    switch (s)
-    {
-    case '+':
-        f->plus = 1;
-        i = 1;
-        break;
-    case ' ':
-        f->space = 1;
-        i = 1;
-        break;
-    case '#':
-        f->hash = 1;
-        i = 1;
-        break;
-    }
+	while (num / 16 != 0)
+	{
+		num /= 16;
+		counter++;
+	}
+	counter++;
+	array = malloc(counter * sizeof(int));
 
-    return (i);
+	for (i = 0; i < counter; i++)
+	{
+		array[i] = temp % 16;
+		temp /= 16;
+	}
+	for (i = counter - 1; i >= 0; i--)
+	{
+		if (array[i] > 9)
+			array[i] = array[i] + 7;
+		_putchar(array[i] + '0');
+	}
+	free(array);
+	return (counter);
 }
